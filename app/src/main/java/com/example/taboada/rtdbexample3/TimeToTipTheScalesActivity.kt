@@ -9,7 +9,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 @ExperimentalMaterialApi
-class MainActivity : ComponentActivity() {
+class TimeToTipTheScalesActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { TimeToTipTheScalesApp() }

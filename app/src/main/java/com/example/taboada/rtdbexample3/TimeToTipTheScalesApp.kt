@@ -17,7 +17,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.makeitso.TimeToTipTheScalesAppState
 import com.example.makeitso.common.snackbar.SnackbarManager
 import com.example.makeitso.theme.TimeToTipTheScalesTheme
 import com.example.taboada.rtdbexample3.screens.chats.ChatScreen

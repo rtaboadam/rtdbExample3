@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package com.example.makeitso
+package com.example.taboada.rtdbexample3
 
 import android.content.res.Resources
 import androidx.compose.material.ScaffoldState
