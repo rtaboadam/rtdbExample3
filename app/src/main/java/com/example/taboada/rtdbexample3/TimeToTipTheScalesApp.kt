@@ -20,6 +20,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.makeitso.common.snackbar.SnackbarManager
 import com.example.makeitso.theme.TimeToTipTheScalesTheme
 import com.example.taboada.rtdbexample3.screens.chats.ChatScreen
+import com.example.taboada.rtdbexample3.screens.login.LoginScreen
+import com.example.taboada.rtdbexample3.screens.settings.SettingsScreen
+import com.example.taboada.rtdbexample3.screens.splash.SplashScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -42,7 +45,7 @@ fun TimeToTipTheScalesApp() {
             ) { innerPaddingModifier ->
                 NavHost(
                     navController = appState.navController,
-                    startDestination = "CHATS",
+                    startDestination = SPLASH_SCREEN,
                     modifier = Modifier.padding(innerPaddingModifier)
                 ) { makeItGraph(appState) }
             }
@@ -71,7 +74,20 @@ fun resources(): Resources {
 
 @ExperimentalMaterialApi
 fun NavGraphBuilder.makeItGraph(appState: TimeToTipTheScalesAppState) {
-    composable("CHATS") {
-        ChatScreen()
+    composable(SPLASH_SCREEN) {
+        SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
+    composable(LOGIN_SCREEN) {
+        LoginScreen(openPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) } )
+    }
+    composable(CHAT_SCREEN) {
+        ChatScreen(openScreen = { route -> appState.navigate(route) } )
+    }
+    composable(SETTINGS_SCREEN) {
+        SettingsScreen(
+            restartApp = { route -> appState.clearAndNavigate(route)},
+            openScreen = { route -> appState.navigate(route) }
+        )
+    }
+
 }

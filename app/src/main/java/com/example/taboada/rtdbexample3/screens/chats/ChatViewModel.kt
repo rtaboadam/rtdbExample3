@@ -3,6 +3,8 @@ package com.example.taboada.rtdbexample3.screens.chats
 import android.util.Log
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.viewModelScope
+import com.example.taboada.rtdbexample3.CHAT_SCREEN
+import com.example.taboada.rtdbexample3.SETTINGS_SCREEN
 import com.example.taboada.rtdbexample3.model.Message
 import com.example.taboada.rtdbexample3.model.service.LogService
 import com.example.taboada.rtdbexample3.model.service.StorageService
@@ -30,11 +32,11 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun onNewMessage(message: Message) {
+    private fun onNewMessage(message: Message) {
         messages[message.id] = message
     }
 
-    fun onDeletedMessage(id: String) {
+    private fun onDeletedMessage(id: String) {
         messages.remove(id)
     }
 
@@ -44,4 +46,7 @@ class ChatViewModel @Inject constructor(
             storageService.deleteMessage(id)
         }
     }
+
+    fun onAddClick(openScreen: (String) -> Unit) = openScreen(CHAT_SCREEN)
+    fun onSettingsClick(openScreen: (String) -> Unit) = openScreen(SETTINGS_SCREEN)
 }

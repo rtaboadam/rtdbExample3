@@ -18,7 +18,7 @@ class StorageServiceImpl @Inject constructor(): StorageService {
     override fun addListener(
         userId: String,
         onNewMessage: (Message) -> Unit,
-        onDeletedMessage: (String, Message) -> Unit
+        onDeletedMessage: (String) -> Unit
     ) {
         chatReference = Firebase.database.reference.child("chats")
         childEventListener = object : ChildEventListener {
@@ -35,7 +35,7 @@ class StorageServiceImpl @Inject constructor(): StorageService {
                     content = snapshot.child("content").toString(),
                     id = snapshot.key!!,
                 )
-                onDeletedMessage(snapshot.key!!, message)
+                onDeletedMessage(snapshot.key!!)
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
@@ -64,5 +64,9 @@ class StorageServiceImpl @Inject constructor(): StorageService {
     override fun deleteMessage(id: String) {
         Firebase.database.reference.child("chats").child(id).removeValue()
 
+    }
+
+    override fun updateUserId(oldUserId: String, newUserId: String, onResult: (Throwable?) -> Unit) {
+        TODO("Not yet implemented")
     }
 }

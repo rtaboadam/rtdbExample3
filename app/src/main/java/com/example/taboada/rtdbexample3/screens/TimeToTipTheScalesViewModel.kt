@@ -15,7 +15,7 @@ open class TimeToTipTheScalesViewModel(private val logService: LogService): View
         logService.logNonFatalCrash(throwable)
     }
 
-    private fun onError(error: Throwable) {
+    open fun onError(error: Throwable) {
         SnackbarManager.showMessage(error.toSnackbarMessage())
         logService.logNonFatalCrash(error)
     }
