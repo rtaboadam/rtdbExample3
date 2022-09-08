@@ -11,18 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.makeitso.common.snackbar.SnackbarManager
 import com.example.makeitso.theme.TimeToTipTheScalesTheme
 import com.example.taboada.rtdbexample3.screens.chats.ChatScreen
+import com.example.taboada.rtdbexample3.screens.conversation.ConversationScreen
+import com.example.taboada.rtdbexample3.screens.createChat.CreateChatScreen
 import com.example.taboada.rtdbexample3.screens.login.LoginScreen
 import com.example.taboada.rtdbexample3.screens.settings.SettingsScreen
 import com.example.taboada.rtdbexample3.screens.splash.SplashScreen
+import com.example.taboada.rtdbexample3.screens.sign_up.SignUpScreen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -43,12 +44,19 @@ fun TimeToTipTheScalesApp() {
                 },
                 scaffoldState = appState.scaffoldState
             ) { innerPaddingModifier ->
+/*
                 NavHost(
                     navController = appState.navController,
                     startDestination = SPLASH_SCREEN,
                     modifier = Modifier.padding(innerPaddingModifier)
                 ) { makeItGraph(appState) }
-            }
+*/
+               NavHost(
+                   navController = appState.navController,
+                   startDestination = CREATE_CHAT_SCREEN,
+                   modifier = Modifier.padding(innerPaddingModifier)
+               ) { makeItGraph(appState) }
+           }
         }
     }
 }
@@ -77,12 +85,32 @@ fun NavGraphBuilder.makeItGraph(appState: TimeToTipTheScalesAppState) {
     composable(SPLASH_SCREEN) {
         SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
+
     composable(LOGIN_SCREEN) {
         LoginScreen(openPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) } )
     }
+
+    composable(SIGN_UP_SCREEN) {
+        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
+    }
+
     composable(CHAT_SCREEN) {
         ChatScreen(openScreen = { route -> appState.navigate(route) } )
     }
+
+    composable(CREATE_CHAT_SCREEN) {
+        CreateChatScreen(openScreen = { route -> appState.navigate(route) })
+    }
+
+    composable("$CONVERSATION_SCREEN/{chatID}",
+        arguments = listOf(navArgument("chatID") { defaultValue = "root" })
+    ) { backStackEntry ->
+        ConversationScreen(
+            chatID = backStackEntry.arguments?.getString("chatID")!!,
+            openScreen = { route -> appState.navigate(route) }
+        )
+    }
+
     composable(SETTINGS_SCREEN) {
         SettingsScreen(
             restartApp = { route -> appState.clearAndNavigate(route)},

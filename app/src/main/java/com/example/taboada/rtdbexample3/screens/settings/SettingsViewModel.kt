@@ -3,7 +3,7 @@ package com.example.taboada.rtdbexample3.screens.settings
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.taboada.rtdbexample3.LOGIN_SCREEN
-import com.example.taboada.rtdbexample3.SIGNUP_SCREEN
+import com.example.taboada.rtdbexample3.SIGN_UP_SCREEN
 import com.example.taboada.rtdbexample3.SPLASH_SCREEN
 import com.example.taboada.rtdbexample3.model.service.AccountService
 import com.example.taboada.rtdbexample3.model.service.LogService
@@ -20,7 +20,7 @@ class SettingsViewModel @Inject constructor(
     private val storageService: StorageService
 ) : TimeToTipTheScalesViewModel(logService) {
     var uiState = mutableStateOf(SettingsUiState())
-        private  set
+        private set
 
     fun initialize() {
         uiState.value = SettingsUiState(accountService.isAnonymousUser())
@@ -28,7 +28,7 @@ class SettingsViewModel @Inject constructor(
 
     fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LOGIN_SCREEN)
 
-    fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SIGNUP_SCREEN)
+    fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SIGN_UP_SCREEN)
 
     fun onSignOutClick(restartApp: (String) -> Unit) {
         viewModelScope.launch(showErrorExceptionHandler) {
@@ -37,9 +37,21 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-//    fun onDeleteMyAccountClick(restartApp: (String) -> Unit) {
-//        viewModelScope.launch(showErrorExceptionHandler) {
-//            storageService.del
-//        }
-//    }
+    fun onDeleteMyAccountClick(restartApp: (String) -> Unit) {
+        viewModelScope.launch(showErrorExceptionHandler) {
+/*
+            storageService.deleteAllForUser(accountService.getUserId()) { error ->
+                if (error == null) deleteAccount(restartApp) else onError(error)
+            }
+*/
+        }
+    }
+
+    private fun deleteAccount(restartApp: (String) -> Unit) {
+        viewModelScope.launch(showErrorExceptionHandler) {
+            accountService.deleteAccount { error ->
+                if (error == null) restartApp(SPLASH_SCREEN) else onError(error)
+            }
+        }
+    }
 }

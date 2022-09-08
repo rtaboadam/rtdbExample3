@@ -11,4 +11,5 @@ interface AccountService {
     fun linkAccount(email: String, password: String, onResult: (Throwable?) -> Unit)
     fun deleteAccount(onResult: (Throwable?) -> Unit)
     fun signOut()
+    fun updateProfile(displayName: String)
 }

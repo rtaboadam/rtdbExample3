@@ -1,8 +1,11 @@
 package com.example.taboada.rtdbexample3.model.service.impl
 
+import android.util.Log
 import com.example.taboada.rtdbexample3.model.service.AccountService
 import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 
@@ -53,6 +56,21 @@ class AccountServiceImpl @Inject constructor() : AccountService {
 
     override fun signOut() {
         Firebase.auth.signOut()
+    }
+
+    override fun updateProfile(name: String) {
+        val user = Firebase.auth.currentUser
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name
+        }
+
+        user!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Log.d("DEV", "User profile updated.")
+            }
+        }
     }
 
 }
