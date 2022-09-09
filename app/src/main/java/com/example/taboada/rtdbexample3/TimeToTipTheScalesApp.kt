@@ -32,7 +32,7 @@ fun TimeToTipTheScalesApp() {
     TimeToTipTheScalesTheme() {
         Surface(color = MaterialTheme.colors.background) {
             val appState = rememberAppState()
-           Scaffold(
+            Scaffold(
                 snackbarHost = {
                     SnackbarHost(
                         hostState = it,
@@ -44,19 +44,12 @@ fun TimeToTipTheScalesApp() {
                 },
                 scaffoldState = appState.scaffoldState
             ) { innerPaddingModifier ->
-/*
                 NavHost(
                     navController = appState.navController,
                     startDestination = SPLASH_SCREEN,
                     modifier = Modifier.padding(innerPaddingModifier)
                 ) { makeItGraph(appState) }
-*/
-               NavHost(
-                   navController = appState.navController,
-                   startDestination = CREATE_CHAT_SCREEN,
-                   modifier = Modifier.padding(innerPaddingModifier)
-               ) { makeItGraph(appState) }
-           }
+            }
         }
     }
 }
@@ -68,9 +61,11 @@ fun rememberAppState(
     snackbarManager: SnackbarManager = SnackbarManager,
     resources: Resources = resources(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
-) = remember(scaffoldState,navController, snackbarManager, resources, coroutineScope) {
-    TimeToTipTheScalesAppState(scaffoldState,
-        navController as NavHostController, snackbarManager, resources, coroutineScope)
+) = remember(scaffoldState, navController, snackbarManager, resources, coroutineScope) {
+    TimeToTipTheScalesAppState(
+        scaffoldState,
+        navController as NavHostController, snackbarManager, resources, coroutineScope
+    )
 }
 
 @Composable
@@ -83,26 +78,27 @@ fun resources(): Resources {
 @ExperimentalMaterialApi
 fun NavGraphBuilder.makeItGraph(appState: TimeToTipTheScalesAppState) {
     composable(SPLASH_SCREEN) {
-        SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
+        SplashScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(LOGIN_SCREEN) {
-        LoginScreen(openPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) } )
+        LoginScreen(openPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(SIGN_UP_SCREEN) {
-        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
+        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(CHAT_SCREEN) {
-        ChatScreen(openScreen = { route -> appState.navigate(route) } )
+        ChatScreen(openScreen = { route -> appState.navigate(route) })
     }
 
     composable(CREATE_CHAT_SCREEN) {
         CreateChatScreen(openScreen = { route -> appState.navigate(route) })
     }
 
-    composable("$CONVERSATION_SCREEN/{chatID}",
+    composable(
+        "$CONVERSATION_SCREEN/{chatID}",
         arguments = listOf(navArgument("chatID") { defaultValue = "root" })
     ) { backStackEntry ->
         ConversationScreen(
@@ -113,7 +109,7 @@ fun NavGraphBuilder.makeItGraph(appState: TimeToTipTheScalesAppState) {
 
     composable(SETTINGS_SCREEN) {
         SettingsScreen(
-            restartApp = { route -> appState.clearAndNavigate(route)},
+            restartApp = { route -> appState.clearAndNavigate(route) },
             openScreen = { route -> appState.navigate(route) }
         )
     }

@@ -20,14 +20,18 @@ class UserViewModel @Inject constructor(
     var users = mutableStateMapOf<String, ChatUser>()
         private set
 
-    fun getUsers() {
+    fun getUsers(){
         viewModelScope.launch {
             storageService.getUsers(onUsersChanged = ::onUserChanged)
         }
     }
 
     private fun onUserChanged(user: ChatUser) {
-        users[user.userID] = user
+        viewModelScope.launch {
+            if (user.userID != accountService.getUserId()) {
+                users[user.userID] = user
+            }
+        }
     }
 
     fun removeListener() {

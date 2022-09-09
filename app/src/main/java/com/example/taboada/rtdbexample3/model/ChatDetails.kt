@@ -4,6 +4,10 @@ import androidx.annotation.DrawableRes
 
 data class ChatDetails(
     val chatID: String = "",
-    val members: MutableMap<String, String> = mutableMapOf(),
+    val members: Map<String, String> = mapOf(),
     val isPublic: Boolean = false
-)
+) {
+    override fun toString(): String {
+        return "ChatDetails:\n-chatID:${this.chatID}\n-members:${this.members.toString()}\n-isPublic:${isPublic.toString()}"
+    }
+}

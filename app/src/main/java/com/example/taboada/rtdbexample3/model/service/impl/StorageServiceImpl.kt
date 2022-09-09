@@ -16,41 +16,6 @@ class StorageServiceImpl @Inject constructor(): StorageService {
     private var myChatsValueEventListener: ValueEventListener? = null
     private var userEventListener: ValueEventListener? = null
 
-//    override fun addListener(
-//        userId: String,
-//        onNewMessage: (Message) -> Unit,
-//        onDeletedMessage: (String) -> Unit
-//    ) {
-//        chatReference = Firebase.database.reference.child("chats")
-//        childEventListener = object : ChildEventListener {
-//            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-//                val message = Message(
-//                    id = snapshot.key!!,
-//                    content = snapshot.child("content").value.toString()
-//                )
-//                onNewMessage(message)
-//            }
-//            override fun onChildRemoved(snapshot: DataSnapshot) {
-////                Log.w("DATABASE", "Message deleted", snapshot.toString())
-//                val message = Message(
-//                    content = snapshot.child("content").toString(),
-//                    id = snapshot.key!!,
-//                )
-//                onDeletedMessage(snapshot.key!!)
-//            }
-//            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-//                TODO("Not yet implemented")
-//            }
-//            override fun onCancelled(error: DatabaseError) {
-//                TODO("Not yet implemented")
-//            }
-//            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-//                TODO("Not yet implemented")
-//            }
-//        }
-//        chatReference?.addChildEventListener(childEventListener!!)
-//    }
-
     override fun removeListener() {
         myChatsReference?.removeEventListener(myChatsValueEventListener!!)
     }
@@ -68,22 +33,19 @@ class StorageServiceImpl @Inject constructor(): StorageService {
         TODO("Not yet implemented")
     }
 
-
     override fun getAllMyChats(userId: String, onChatChanged: (ChatDetails) -> Unit) {
         myChatsReference = Firebase.database.reference.child("myChats").child(userId)
         myChatsValueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach { dataSnapshot ->
-                    var newMemebers = mutableMapOf<String, String>()
-
-                    dataSnapshot.children.forEach { dataSnapshot ->
-                        newMemebers[dataSnapshot.key!!] = dataSnapshot.value.toString()
-                    }
-                    val chat = ChatDetails(
-                        chatID = dataSnapshot.key!!,
-                        members = newMemebers
+                snapshot.children.forEach {
+                    val chatDetails = ChatDetails(
+                        members = (it.child("members").children
+                            .map { m -> (m.key!! to m.value as String) })
+                            .toMap(),
+                        isPublic = it.child("type").value as String == "public",
+                        chatID = it.key!!
                     )
-                   onChatChanged(chat)
+                    onChatChanged(chatDetails)
                 }
             }
             override fun onCancelled(error: DatabaseError) {
@@ -93,7 +55,6 @@ class StorageServiceImpl @Inject constructor(): StorageService {
         }
         myChatsReference!!.addListenerForSingleValueEvent(myChatsValueEventListener!!)
     }
-
 
     override fun getUsers(onUsersChanged: (ChatUser) -> Unit) {
         userEventListener = object: ValueEventListener {

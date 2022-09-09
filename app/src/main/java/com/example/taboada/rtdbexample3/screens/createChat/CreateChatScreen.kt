@@ -50,7 +50,7 @@ fun CreateChatScreen(
     createScreenViewModel: CreateChatViewModel = hiltViewModel()
 ) {
     var users = userViewModel.users
-    var members = createScreenViewModel.members
+    var uiState = createScreenViewModel.uiState
 
     Scaffold (
         floatingActionButton = {
@@ -73,6 +73,9 @@ fun CreateChatScreen(
                 endAction = { createScreenViewModel.onChatAdded(openScreen) },
                 endActionIcon = AppIcon.ic_check
             )
+
+            Text(uiState.value.toString())
+
             Card(
                 modifier = modifier
                     .fillMaxWidth()
@@ -85,7 +88,7 @@ fun CreateChatScreen(
                     Text(text = "Chatter Members", style = MaterialTheme.typography.h4)
                     Spacer(modifier = Modifier.smallSpacer())
                     LazyColumn {
-                        items(members.keys.toList(), key = {it}) { userID ->
+                        items(uiState.value.members.keys.toList(), key = {it}) { userID ->
                             Text("Chatter: $userID")
                         }
                     }
@@ -129,21 +132,19 @@ fun RadioButtonSample(onTypeChanged: (Boolean) -> Unit) {
                     .fillMaxWidth()
                     .selectable(
                         selected = (text == selectedOption),
-                        onClick = {
-                            onOptionSelected(text)
-                            onTypeChanged(text == "public")
-                        }
+                        onClick = {}
                     )
-//                    .padding(horizontal = 4.dp)
             ) {
                 RadioButton(
                     selected = (text == selectedOption),
-                    onClick = { onOptionSelected(text) }
+                    onClick = {
+                        onOptionSelected(text)
+                        onTypeChanged(text == "public")
+                    }
                 )
                 Text(
                     text = text,
                     style = MaterialTheme.typography.body1.merge(),
-//                    modifier = Modifier.padding(start = 16.dp)
                 )
             }
         }

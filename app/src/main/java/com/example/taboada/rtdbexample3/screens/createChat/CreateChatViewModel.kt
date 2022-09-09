@@ -21,41 +21,30 @@ class CreateChatViewModel @Inject constructor(
     private val accountService: AccountService,
     private val storageService: StorageService
 ): TimeToTipTheScalesViewModel(logService) {
-//    var uiState = mutableStateOf(CreateChatUiState())
     var uiState = mutableStateOf(ChatDetails())
-
-    val members get() = uiState.value.members
-    val isPublic get()= uiState.value.isPublic
 
     fun onMemberUpdate(checked:Boolean, user: ChatUser) {
         if (checked) {
-            uiState.value.members[user.userID] = "chatter"
+            uiState.value = uiState.value.copy(members = uiState.value.members + (user.userID to "chatter"))
         } else {
-            uiState.value.members.remove(user.userID)
+            uiState.value = uiState.value.copy(
+                members = uiState.value.members.filterKeys { user.userID != it },
+            )
         }
-//        uiState.value = if(checked) {
-////            uiState.value.copy(members = members + (user.userID to "chatter"))
-//        } else {
-////            uiState.value.copy(members = members.filterKeys { x -> x != user.userID })
-//        }
-//        Log.w("DEBUG", members.toString())
     }
 
     fun onTypeChanged(isPublic: Boolean) {
         uiState.value = uiState.value.copy(isPublic = isPublic)
     }
 
-    fun onChatAdded(openScreen: (String) -> Unit)  {
-
+    fun onChatAdded(openScreen: (String) -> Unit) {
         viewModelScope.launch {
-//            uiState.value.copy(members = members + (accountService.getUserId() to "owner") )
+            uiState.value = uiState.value.copy(members = uiState.value.members + (accountService.getUserId() to "owner"))
             storageService.addNewChat(uiState.value) {
                 uiState = mutableStateOf(ChatDetails())
                 openScreen(CHAT_SCREEN)
             }
         }
-
-//        uiState = mutableStateOf(CreateChatUiState())
-//        openScreen(CHAT_SCREEN)
     }
+
 }
