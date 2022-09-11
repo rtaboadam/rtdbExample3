@@ -30,6 +30,7 @@ import com.example.taboada.rtdbexample3.R.string as AppText
 import com.example.taboada.rtdbexample3.common.composable.*
 import com.example.taboada.rtdbexample3.common.ext.card
 import com.example.taboada.rtdbexample3.common.ext.spacer
+import com.example.taboada.rtdbexample3.screens.users.UserViewModel
 
 
 @ExperimentalMaterialApi
@@ -38,7 +39,7 @@ fun SettingsScreen(
     restartApp: (String) -> Unit,
     openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState
 

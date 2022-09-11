@@ -13,6 +13,7 @@ class ConversationViewModel @Inject constructor(
     logService: LogService,
     private val storageService: StorageService,
 ): TimeToTipTheScalesViewModel(logService) {
+
     var uiState = mutableStateOf(ConversationUiState())
 
     fun initialize() {}

@@ -12,9 +12,14 @@ import com.google.firebase.ktx.Firebase
 import javax.inject.Inject
 
 class StorageServiceImpl @Inject constructor(): StorageService {
+    private var database = Firebase.database
     private var myChatsReference: DatabaseReference? = null
     private var myChatsValueEventListener: ValueEventListener? = null
     private var userEventListener: ValueEventListener? = null
+
+    override fun useEmulator(host: String, port: Int) {
+        database.useEmulator(host, port)
+    }
 
     override fun removeListener() {
         myChatsReference?.removeEventListener(myChatsValueEventListener!!)
@@ -25,7 +30,7 @@ class StorageServiceImpl @Inject constructor(): StorageService {
     }
 
     override fun deleteMessage(id: String) {
-        Firebase.database.reference.child("chats").child(id).removeValue()
+        database.reference.child("chats").child(id).removeValue()
 
     }
 
@@ -34,7 +39,7 @@ class StorageServiceImpl @Inject constructor(): StorageService {
     }
 
     override fun getAllMyChats(userId: String, onChatChanged: (ChatDetails) -> Unit) {
-        myChatsReference = Firebase.database.reference.child("myChats").child(userId)
+        myChatsReference = database.reference.child("myChats").child(userId)
         myChatsValueEventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach {
@@ -73,17 +78,16 @@ class StorageServiceImpl @Inject constructor(): StorageService {
                 Log.w("STORAGE_SERVICE", error.message)
             }
         }
-        Firebase.database.reference
+        database.reference
             .child("users").addListenerForSingleValueEvent(userEventListener!!)
     }
 
     override fun removeUserListener() {
-        Firebase.database.reference.child("users").removeEventListener(userEventListener!!)
+        database.reference.child("users").removeEventListener(userEventListener!!)
     }
 
     override fun addNewChat(value: ChatDetails, onSuccess: () -> Unit) {
-        val database = Firebase.database.reference
-        val key = database.child("chats").push().key
+        val key = database.reference.child("chats").push().key
         if ( key == null ) {
             Log.w("STORAGE_SERVICE", "Couldn't get push key for chats")
         }
@@ -96,7 +100,7 @@ class StorageServiceImpl @Inject constructor(): StorageService {
         var childUpdates = (value.members.keys.map { "myChats/$it/$key" to chat }).toMap<String,Any>()
         childUpdates+= ("chats/$key" to chat)
 
-        Firebase.database.reference.updateChildren(childUpdates)
+        database.reference.updateChildren(childUpdates)
             .addOnCompleteListener { onSuccess() }
             .addOnFailureListener { Log.w("STORAGE_SERVICE", "Error getting data", it) }
     }

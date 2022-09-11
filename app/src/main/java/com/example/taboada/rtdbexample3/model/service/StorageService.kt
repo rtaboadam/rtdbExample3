@@ -10,6 +10,7 @@ interface StorageService {
 //        onNewMessage: (Message) -> Unit,
 //        onDeletedMessage: (String) -> Unit
 //    )
+    fun useEmulator(host:String, port:Int)
     fun getAllMyChats(userID: String, onChatChanged: (ChatDetails) -> Unit)
     fun removeListener()
     fun saveMessage(message: Message, onResult: (Throwable?) -> Unit)
