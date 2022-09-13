@@ -27,9 +27,17 @@ class AccountServiceImpl @Inject constructor() : AccountService {
             .addOnCompleteListener { onResult(it.exception) }
     }
 
-    override fun createAccount(email: String, password: String, onResult: (Throwable?) -> Unit) {
+    override fun createAccount(email: String, password: String, dName: String, onResult: (Throwable?) -> Unit) {
         Firebase.auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { onResult(it.exception) }
+            .addOnCompleteListener {
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = dName
+                }
+                Firebase.auth.currentUser!!.updateProfile(profileUpdates)
+                    .addOnCompleteListener {
+                        onResult(it.exception)
+                    }
+            }
     }
 
     override fun sendRecoveryEmail(email: String, onResult: (Throwable?) -> Unit) {
@@ -67,10 +75,18 @@ class AccountServiceImpl @Inject constructor() : AccountService {
 
         user!!.updateProfile(profileUpdates)
             .addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Log.d("DEV", "User profile updated.")
+                if (task.isSuccessful) {
+                    Log.d("DEV", "User profile updated.")
+                }
             }
+    }
+
+    override fun getDisplayName(): String {
+        val user = Firebase.auth.currentUser
+        if (user != null && !user.isAnonymous) {
+            return user.displayName!!
         }
+        return ""
     }
 
 }

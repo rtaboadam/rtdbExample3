@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.taboada.rtdbexample3.model.ChatUser
 import com.example.taboada.rtdbexample3.model.Message
 import com.example.taboada.rtdbexample3.model.data.getConversationMessages
@@ -41,11 +43,16 @@ fun PreviewConversationScreen() {
 fun ConversationScreen(
     chatID: String,
     openScreen: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ConversationViewModel = hiltViewModel(),
 ) {
 
     var scrollBehavior = rememberScrollState()
     var scrollState = rememberLazyListState()
+
+    val currentUser = viewModel.currentUser
+    val messages = viewModel.conversationMessages
+
     Surface(
         modifier = modifier
     ) {
@@ -60,16 +67,24 @@ fun ConversationScreen(
                     title = { Text(chatID) },
                 )
                 Messages(
-                    messages = getConversationMessages(),
+                    messages = messages.values.toList().sortedByDescending { it.timestamp },
                     modifier = Modifier.weight(1f),
                     scrollState = scrollState,
-                    navigationToProfile = openScreen,
+                    navigationToProfile = {},
+                    userMe = currentUser.value
                 )
                 UserInput(
-                    onMessageSent = {},
+                    onMessageSent = { viewModel.sendMessage(chatID, it) },
                     resetScroll = {},
                 )
             }
+        }
+    }
+
+    DisposableEffect(viewModel) {
+        viewModel.initialize(chatID)
+        onDispose {
+            viewModel.removeListener(chatID)
         }
     }
 

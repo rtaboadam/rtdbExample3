@@ -23,7 +23,11 @@ class SettingsViewModel @Inject constructor(
         private set
 
     fun initialize() {
-        uiState.value = SettingsUiState(accountService.isAnonymousUser())
+        uiState.value = SettingsUiState(
+            isAnonymousAccount = accountService.isAnonymousUser(),
+            userID = accountService.getUserId(),
+            displayName = accountService.getDisplayName()
+        )
     }
 
     fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LOGIN_SCREEN)

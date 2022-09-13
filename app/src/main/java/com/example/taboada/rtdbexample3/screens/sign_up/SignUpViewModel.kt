@@ -64,7 +64,8 @@ class SignUpViewModel @Inject constructor(
 
         viewModelScope.launch(showErrorExceptionHandler) {
             val oldUserId = accountService.getUserId()
-            accountService.createAccount(email, password) { error ->
+            accountService.createAccount(email, password, displayName)
+            { error ->
                 if (error == null) {
                     linkWithEmail()
                     updateUserId(oldUserId, openAndPopUp)
@@ -85,7 +86,7 @@ class SignUpViewModel @Inject constructor(
         viewModelScope.launch(showErrorExceptionHandler) {
             val newUserId = accountService.getUserId()
             viewModelScope.launch(showErrorExceptionHandler){
-                accountService.updateProfile(displayName)
+                storageService.updateUserProfile(newUserId,uiState.value)
             }
             openAndPopUp(SETTINGS_SCREEN, SIGN_UP_SCREEN)
         }

@@ -46,7 +46,7 @@ fun TimeToTipTheScalesApp() {
             ) { innerPaddingModifier ->
                 NavHost(
                     navController = appState.navController,
-                    startDestination = "$CONVERSATION_SCREEN",
+                    startDestination = SPLASH_SCREEN,
                     modifier = Modifier.padding(innerPaddingModifier)
                 ) { makeItGraph(appState) }
             }
@@ -97,23 +97,15 @@ fun NavGraphBuilder.makeItGraph(appState: TimeToTipTheScalesAppState) {
         CreateChatScreen(openScreen = { route -> appState.navigate(route) })
     }
 
-    composable(CONVERSATION_SCREEN) {
+    composable(
+        "$CONVERSATION_SCREEN/{chatID}",
+        arguments = listOf(navArgument("chatID") { defaultValue = "root" })
+    ) { backStackEntry ->
         ConversationScreen(
-            chatID = "fooo",
-//            chatID = backStackEntry.arguments?.getString("chatID")!!,
+            chatID = backStackEntry.arguments?.getString("chatID")!!,
             openScreen = { route -> appState.navigate(route) }
         )
     }
-
-//    composable(
-//        "$CONVERSATION_SCREEN/{chatID}",
-//        arguments = listOf(navArgument("chatID") { defaultValue = "root" })
-//    ) { backStackEntry ->
-//        ConversationScreen(
-//            chatID = backStackEntry.arguments?.getString("chatID")!!,
-//            openScreen = { route -> appState.navigate(route) }
-//        )
-//    }
 
     composable(SETTINGS_SCREEN) {
         SettingsScreen(

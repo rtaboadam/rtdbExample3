@@ -74,8 +74,6 @@ fun CreateChatScreen(
                 endActionIcon = AppIcon.ic_check
             )
 
-            Text(uiState.value.toString())
-
             Card(
                 modifier = modifier
                     .fillMaxWidth()

@@ -22,7 +22,7 @@ import com.example.taboada.rtdbexample3.R.string as AppText
 fun ChatScreen(
     openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ChatViewModel = hiltViewModel()
+    viewModel: ChatViewModel = hiltViewModel(),
 ) {
 
     Scaffold(floatingActionButton = {
@@ -50,14 +50,21 @@ fun ChatScreen(
 
             Spacer(modifier = Modifier.smallSpacer())
 
-            LazyColumn {
-                items(chats.values.toList(), key = { it.chatID }) { chatItem ->
-                    ChatDetailsItem(
-                        chatDetails = chatItem,
-                        onClickAction = { viewModel.onChatClick(openScreen, chatItem) })
+            Card {
+                Column {
+                    if (chats.values.isNotEmpty()) {
+                        Text(text = "Private Chats", style = MaterialTheme.typography.h3)
+                        Spacer(modifier = Modifier.smallSpacer())
+                    }
+                    LazyColumn {
+                        items(chats.values.toList(), key = { it.chatID }) { chatItem ->
+                            ChatDetailsItem(
+                                chatDetails = chatItem,
+                                onClickAction = { viewModel.onChatClick(openScreen, chatItem) })
+                        }
+                    }
                 }
             }
-
         }
     }
 

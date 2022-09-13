@@ -22,6 +22,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -45,6 +46,18 @@ fun BasicField(
         value = value,
         onValueChange = { onNewValue(it) },
         placeholder = { Text(stringResource(text)) }
+    )
+}
+
+@Composable
+fun DisplayNameField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
+    OutlinedTextField(
+        singleLine = true,
+        modifier = modifier,
+        value = value,
+        onValueChange = { onNewValue(it) },
+        placeholder = { Text("Display Name") },
+        leadingIcon = { Icon(imageVector = Icons.Default.VerifiedUser, contentDescription = "Display Name") }
     )
 }
 

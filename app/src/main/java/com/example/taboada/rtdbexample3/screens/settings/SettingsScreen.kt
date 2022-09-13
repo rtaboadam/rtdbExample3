@@ -24,6 +24,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.taboada.rtdbexample3.R.drawable as AppIcon
 import com.example.taboada.rtdbexample3.R.string as AppText
@@ -61,10 +62,28 @@ fun SettingsScreen(
                 viewModel.onLoginClick(openScreen)
             }
 
-            RegularCardEditor(AppText.create_account, AppIcon.ic_create_account, "", Modifier.card()) {
+            RegularCardEditor(
+                AppText.create_account,
+                AppIcon.ic_create_account,
+                "",
+                Modifier.card()
+            ) {
                 viewModel.onSignUpClick(openScreen)
             }
         } else {
+            Card(backgroundColor = MaterialTheme.colors.onPrimary, modifier = modifier){
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                ) {
+                    Text(text = "UID", style = MaterialTheme.typography.caption)
+                    Text(text = uiState.userID)
+                    Text(text = "Display Name", style = MaterialTheme.typography.caption)
+                    Text(text = uiState.displayName)
+                }
+            }
+
             SignOutCard { viewModel.onSignOutClick(restartApp) }
             DeleteMyAccountCard { viewModel.onDeleteMyAccountClick(restartApp) }
         }
@@ -80,7 +99,7 @@ private fun SignOutCard(signOut: () -> Unit) {
         showWarningDialog = true
     }
 
-    if(showWarningDialog) {
+    if (showWarningDialog) {
         AlertDialog(
             title = { Text(stringResource(AppText.sign_out_title)) },
             text = { Text(stringResource(AppText.sign_out_description)) },
@@ -101,11 +120,16 @@ private fun SignOutCard(signOut: () -> Unit) {
 private fun DeleteMyAccountCard(deleteMyAccount: () -> Unit) {
     var showWarningDialog by remember { mutableStateOf(false) }
 
-    DangerousCardEditor(AppText.delete_my_account, AppIcon.ic_delete_my_account, "", Modifier.card()) {
+    DangerousCardEditor(
+        AppText.delete_my_account,
+        AppIcon.ic_delete_my_account,
+        "",
+        Modifier.card()
+    ) {
         showWarningDialog = true
     }
 
-    if(showWarningDialog) {
+    if (showWarningDialog) {
         AlertDialog(
             title = { Text(stringResource(AppText.delete_account_title)) },
             text = { Text(stringResource(AppText.delete_account_description)) },

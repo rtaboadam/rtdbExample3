@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.makeitso.common.snackbar.SnackbarManager
 import com.example.taboada.rtdbexample3.CHAT_SCREEN
 import com.example.taboada.rtdbexample3.LOGIN_SCREEN
+import com.example.taboada.rtdbexample3.SETTINGS_SCREEN
 import com.example.taboada.rtdbexample3.common.ext.isValidEmail
 import com.example.taboada.rtdbexample3.model.service.AccountService
 import com.example.taboada.rtdbexample3.model.service.LogService
@@ -68,11 +69,12 @@ class LoginViewModel @Inject constructor(
     private fun updateUserId(oldUserId: String, openAndPopUp: (String, String) -> Unit) {
         viewModelScope.launch(showErrorExceptionHandler) {
             val newUserId = accountService.getUserId()
+            openAndPopUp(SETTINGS_SCREEN, LOGIN_SCREEN)
 
-            storageService.updateUserId(oldUserId, newUserId) { error ->
-                if (error != null) logService.logNonFatalCrash(error)
-                else openAndPopUp(CHAT_SCREEN, LOGIN_SCREEN)
-            }
+//            storageService.updateUserId(oldUserId, newUserId) { error ->
+//                if (error != null) logService.logNonFatalCrash(error)
+//                else openAndPopUp(CHAT_SCREEN, LOGIN_SCREEN)
+//            }
         }
     }
 

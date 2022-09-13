@@ -47,7 +47,7 @@ fun UserCardCheckbox(
                     .border(3.dp, MaterialTheme.colors.surface, CircleShape)
                     .clip(CircleShape)
                 /*.align(Alignment.Top)*/,
-                painter = painterResource(id = AppIcons.peach),
+                painter = painterResource(id = AppIcons.daisy),
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
             )

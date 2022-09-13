@@ -44,5 +44,5 @@ class ChatViewModel @Inject constructor(
      */
     fun onAddClick(openScreen: (String) -> Unit) = openScreen(CREATE_CHAT_SCREEN)
     fun onSettingsClick(openScreen: (String) -> Unit) = openScreen(SETTINGS_SCREEN)
-    fun onChatClick(openScreen: (String) -> Unit, chatDetails: ChatDetails) = openScreen("$CONVERSATION_SCREEN/{${chatDetails.chatID}}")
+    fun onChatClick(openScreen: (String) -> Unit, chatDetails: ChatDetails) = openScreen("$CONVERSATION_SCREEN/${chatDetails.chatID}")
 }

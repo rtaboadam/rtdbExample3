@@ -36,7 +36,7 @@ fun SignUpScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        BasicField(text = AppText.create_accoun_display_name, value = uiState.displayName, onNewValue = viewModel::onDisplayNameChange, modifier = fieldModifier )
+        DisplayNameField(uiState.displayName, viewModel::onDisplayNameChange, fieldModifier)
         EmailField(uiState.email, viewModel::onEmailChange, fieldModifier)
         PasswordField(uiState.password, viewModel::onPasswordChange, fieldModifier)
         RepeatPasswordField(uiState.repeatPassword, viewModel::onRepeatPasswordChange, fieldModifier)

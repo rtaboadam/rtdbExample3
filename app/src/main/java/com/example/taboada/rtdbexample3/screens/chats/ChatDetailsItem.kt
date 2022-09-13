@@ -38,7 +38,9 @@ fun ChatDetailsItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
         ) {
             Image(
                 modifier = Modifier
@@ -49,7 +51,7 @@ fun ChatDetailsItem(
                     .border(3.dp, MaterialTheme.colors.surface, CircleShape)
                     .clip(CircleShape)
                 /*.align(Alignment.Top)*/,
-                painter = painterResource(id = AppIcons.daisy),
+                painter = painterResource(id = AppIcons.chat_image),
                 contentScale = ContentScale.Crop,
                 contentDescription = null,
             )
